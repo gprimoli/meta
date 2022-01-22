@@ -1,0 +1,1 @@
+web3j generate truffle --truffle-json="C:\Users\Gennaro Pio Rimoli\IdeaProjects\Meta\src\main\resources\build\contracts\Game.json" --outputDir="C:\Users\Gennaro Pio Rimoli\IdeaProjects\Meta\src\main\java" --package="it.gennaro.unisa"
