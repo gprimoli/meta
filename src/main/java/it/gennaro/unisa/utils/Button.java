@@ -1,4 +1,4 @@
-package it.gennaro.unisa.panels.customization;
+package it.gennaro.unisa.utils;
 
 import javax.swing.*;
 

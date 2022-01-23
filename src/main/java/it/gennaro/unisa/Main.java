@@ -8,7 +8,7 @@ public class Main {
         frame.setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
         //GUI è stato scritto con l'unico scopo di fare TEST!
         frame.getContentPane().add (new GUI());
-        frame.pack();
+        frame.setSize(1000,300);
         frame.setVisible (true);
     }
 }
