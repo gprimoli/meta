@@ -21,7 +21,7 @@ contract Game is AccessControl {
 
     fallback() external payable {
         infoPlayer[msg.sender].gold += msg.value;
-    }//In teoria questo metodo non serve perché msg.data is empty dovrebbe essere sempre empty.
+    }//In teoria questo metodo non serve perché msg.data dovrebbe essere sempre empty.
     receive() external payable {
         infoPlayer[msg.sender].gold += msg.value;
     }
@@ -51,10 +51,6 @@ contract Game is AccessControl {
     //Funzioni per la gestione delle infoPlayer (Gold/Inventory)
     function getGold() external view returns (uint256){
         return infoPlayer[msg.sender].gold;
-    }
-    function updatePlayerInfo(address who, uint256 goldAdd) external {
-        require(hasRole(GAME_MASTER, msg.sender), "Devi essere un Game Master per eseguire questa operazione");
-        infoPlayer[who].gold += goldAdd;
     }
     function drawback() external {
         require(hasRole(GAME_MASTER, msg.sender), "Devi essere un Game Master per eseguire questa operazione");
@@ -113,4 +109,9 @@ contract Game is AccessControl {
         infoPlayer[msg.sender].gold += (items[tmp.id].price * 80) / 100;
     }
 
+    //    DebugOnly
+    //    function updatePlayerInfo(address who, uint256 goldAdd) external {
+    //        require(hasRole(GAME_MASTER, msg.sender), "Devi essere un Game Master per eseguire questa operazione");
+    //        infoPlayer[who].gold += goldAdd;
+    //    }
 }

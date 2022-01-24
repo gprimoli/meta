@@ -12,8 +12,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class GUI extends JPanel {
-    private static final String gameAddrHC = "0xdC531385C4CD0d55E744595B7c8824070E724BB7";
-    private static final String pKeyHC = "f2909bd0da75d79136b0d3b9df5ad04a7f2995f6148e8b0feb26821c1e3b2c16";
+    private static final String gameAddrHC = "0x1bb44c35129034c97F3B0b2Ed33452958d845f1d";
+    private static final String pKeyHC = "f7e9a32bb319fb3096679f2fae9f8a26957158e485b0efbfbb72d45159c267d4";
     private final JPanel loggedPanel = new JPanel();
     private final JPanel loginPanel = new JPanel();
     private final JLabel infoGold = new JLabel("Wei");
@@ -77,16 +77,6 @@ public class GUI extends JPanel {
         loggedPanel.add(setupFooter(body), BorderLayout.SOUTH);
     }
 
-    private void reloadGold() {
-        BigInteger gold = BigInteger.ZERO;
-        try {
-            gold = gm.getGold();
-        } catch (BlockChainException e) {
-            showError();
-        }
-        infoGold.setText(gold.toString() + " wei");
-    }
-
     private JPanel setupProfile() {
         JPanel ret = new JPanel(new FlowLayout());
 
@@ -112,7 +102,6 @@ public class GUI extends JPanel {
         ret.add(acq);
         return ret;
     }
-
 
     private JPanel setupFooter(JPanel body) {
         body.add(setupArmery(), "armeria");
@@ -149,40 +138,6 @@ public class GUI extends JPanel {
         return ret;
     }
 
-
-    private void setupInventoryContent() {
-        inventaryContent.removeAll();
-        List<Item> GameItems = new LinkedList<>();
-        try {
-            GameItems = gm.getInventory();
-        } catch (BlockChainException e) {
-            showError();
-        }
-        inventaryContent.setLayout(new GridLayout((GameItems.size() / 5) + 1, 5));
-        for (int i = 0; i < GameItems.size(); i++) {
-            JPanel p = new JPanel();
-            BoxLayout bl = new BoxLayout(p, BoxLayout.Y_AXIS);
-            p.setLayout(bl);
-
-            p.add(new JLabel("Nome: " + GameItems.get(i).getName()));
-            p.add(new JLabel("Id: " + GameItems.get(i).getVal1()));
-            p.add(new JLabel("Numero: " + GameItems.get(i).getVal2()));
-            Button acq = new Button("Vendi", i);
-            acq.addActionListener(el -> {
-                try {
-                    gm.sell(((Button) el.getSource()).getPos());
-                    showInfo("Vendita effettuata con successo");
-                    reloadGold();
-                    setupInventoryContent();
-                } catch (BlockChainException e) {
-                    showError();
-                }
-            });
-            p.add(acq);
-            inventaryContent.add(p);
-        }
-    }
-
     public JPanel setupInventary() {
         JPanel ret = new JPanel();
         BoxLayout bt = new BoxLayout(ret, BoxLayout.Y_AXIS);
@@ -193,11 +148,35 @@ public class GUI extends JPanel {
         ret.add(row1);
 
         ret.add(inventaryContent);
-        setupInventoryContent();
+        reloadInventoryContent();
         return ret;
     }
 
-    private void setupArmeryContent() {
+    public JPanel setupArmery() {
+        JPanel ret = new JPanel();
+        BoxLayout bt = new BoxLayout(ret, BoxLayout.Y_AXIS);
+        ret.setLayout(bt);
+
+        JPanel row1 = new JPanel(new FlowLayout());
+        row1.add(new JLabel("Armeria"));
+        ret.add(row1);
+        ret.add(armeriaContent);
+        reloadArmeryContent();
+        return ret;
+    }
+
+    //Reload Content
+    private void reloadGold() {
+        BigInteger gold = BigInteger.ZERO;
+        try {
+            gold = gm.getGold();
+        } catch (BlockChainException e) {
+            showError();
+        }
+        infoGold.setText(gold.toString() + " wei");
+    }
+
+    private void reloadArmeryContent() {
         armeriaContent.removeAll();
         List<Item> GameItems = new LinkedList<>();
         try {
@@ -220,7 +199,7 @@ public class GUI extends JPanel {
                     gm.buy(((Button) el.getSource()).getPos());
                     showInfo("Acquisto effettuato con successo");
                     reloadGold();
-                    setupArmeryContent();
+                    reloadArmeryContent();
                 } catch (BlockChainException e) {
                     showError();
                 }
@@ -230,20 +209,40 @@ public class GUI extends JPanel {
         }
     }
 
+    private void reloadInventoryContent() {
+        inventaryContent.removeAll();
+        List<Item> GameItems = new LinkedList<>();
+        try {
+            GameItems = gm.getInventory();
+        } catch (BlockChainException e) {
+            showError();
+        }
+        inventaryContent.setLayout(new GridLayout((GameItems.size() / 5) + 1, 5));
+        for (int i = 0; i < GameItems.size(); i++) {
+            JPanel p = new JPanel();
+            BoxLayout bl = new BoxLayout(p, BoxLayout.Y_AXIS);
+            p.setLayout(bl);
 
-    public JPanel setupArmery() {
-        JPanel ret = new JPanel();
-        BoxLayout bt = new BoxLayout(ret, BoxLayout.Y_AXIS);
-        ret.setLayout(bt);
-
-        JPanel row1 = new JPanel(new FlowLayout());
-        row1.add(new JLabel("Armeria"));
-        ret.add(row1);
-        ret.add(armeriaContent);
-        setupArmeryContent();
-        return ret;
+            p.add(new JLabel("Nome: " + GameItems.get(i).getName()));
+            p.add(new JLabel("Id: " + GameItems.get(i).getVal1()));
+            p.add(new JLabel("Numero: " + GameItems.get(i).getVal2()));
+            Button acq = new Button("Vendi", i);
+            acq.addActionListener(el -> {
+                try {
+                    gm.sell(((Button) el.getSource()).getPos());
+                    showInfo("Vendita effettuata con successo");
+                    reloadGold();
+                    reloadInventoryContent();
+                } catch (BlockChainException e) {
+                    showError();
+                }
+            });
+            p.add(acq);
+            inventaryContent.add(p);
+        }
     }
 
+    //Metodi di servizio
     private void showError() {
         JOptionPane.showMessageDialog(this, "Errore sulla blockchain contralla la console", "Errore", JOptionPane.ERROR_MESSAGE);
     }

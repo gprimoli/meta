@@ -9,23 +9,18 @@ import java.util.List;
 
 public class MainTest {
     public static void main(String[] args) throws Exception {
-        String gameAddr = "0xbA52D847DFE9eB509af85Aa161A7210Bd50A9128";
+        String gameAddr = "0x1bb44c35129034c97F3B0b2Ed33452958d845f1d";
 
-        String adminAddr = "0x36DE4Cd32B0179eE51Bd824C6210bf652f0154ED";
-        String adminPrivateKey = "087666530921b7806c23d70c39b54b056937ff9d9c6f0ac7b3f42f750445e7f6";
+        String adminAddr = "0x3F3B888Af7E10B5f99cfD3F38Eb7e124AC74414F";
+        String adminPrivateKey = "43359905831ca59d079e979ee2540a0eb27f65b5d420a60192f27c82298a57b3";
 
-        String userAddr = "0x82Ebe74809B611f5618988faFB3248d8bd1De7EE";
-        String userPrivateKey = "f2909bd0da75d79136b0d3b9df5ad04a7f2995f6148e8b0feb26821c1e3b2c16";
+        String userAddr = "0x67E7D479efd8a8c0779B5cf1d23E84df3afeaDa3";
+        String userPrivateKey = "f7e9a32bb319fb3096679f2fae9f8a26957158e485b0efbfbb72d45159c267d4";
 
         GameUtil gu1 = new GameUtil(gameAddr, adminPrivateKey);
         GameUtil gu2 = new GameUtil(gameAddr, userPrivateKey);
 
-
-        gu2.buy(1);
-        System.out.println(gu2.getInventory());
-
-//        List<Item> l = gu1.getInventory();
-//        System.out.println(l);
+        gu1.createItem("Test", 0.01, 10);
 
         gu1.close();
         gu2.close();

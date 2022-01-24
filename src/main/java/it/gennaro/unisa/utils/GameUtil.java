@@ -109,20 +109,12 @@ public class GameUtil {
 
 
     //Admin Function
-    public void createItem(String name, long price, long qtyMAX) throws BlockChainException {
+    public void createItem(String name, double priceETH, long qtyMAX) throws BlockChainException {
         try {
-            gameEngine.createItem(name, BigInteger.valueOf(price), BigInteger.valueOf(qtyMAX)).send();
+            gameEngine.createItem(name, BigInteger.valueOf((long) (Long.parseLong("1000000000000000000") * priceETH)), BigInteger.valueOf(qtyMAX)).send();
         } catch (Exception e) {
             System.err.println(e.getMessage());
             throw new BlockChainException("createItem()");
-        }
-    }
-    public void updatePlayer(String add, long gold) throws BlockChainException {
-        try {
-            gameEngine.updatePlayerInfo(add, BigInteger.valueOf(gold)).send();
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-            throw new BlockChainException("updatePlayer()");
         }
     }
     public void drawBack() throws BlockChainException {
